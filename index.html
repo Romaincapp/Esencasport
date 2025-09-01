@@ -279,6 +279,7 @@
             font-weight: 600;
             color: #2c3e50;
             flex: 1;
+            text-align: center;
         }
         
         .vs {
@@ -341,6 +342,7 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-top: 20px;
         }
         
         .ranking-table thead {
@@ -403,6 +405,7 @@
         
         .save-button:hover {
             background: #218838;
+            transform: translateY(-2px);
         }
         
         .edit-notice {
@@ -446,9 +449,9 @@
         </header>
         
         <div class="tabs">
-            <button class="tab active" onclick="showTab('planning')">📅 Planning</button>
-            <button class="tab" onclick="showTab('results')">📝 Résultats</button>
-            <button class="tab" onclick="showTab('ranking')">🏆 Classement</button>
+            <button class="tab active" onclick="showTab('planning', this)">📅 Planning</button>
+            <button class="tab" onclick="showTab('results', this)">📝 Résultats</button>
+            <button class="tab" onclick="showTab('ranking', this)">🏆 Classement</button>
         </div>
         
         <!-- Onglet Planning -->
@@ -682,7 +685,7 @@
         }
         
         // Afficher un onglet
-        function showTab(tabName) {
+        function showTab(tabName, tabElement) {
             // Masquer tous les onglets
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
@@ -693,7 +696,7 @@
             
             // Afficher l'onglet sélectionné
             document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
+            tabElement.classList.add('active');
             
             // Mettre à jour le contenu si nécessaire
             if (tabName === 'results') {
@@ -928,7 +931,7 @@
             });
             
             // Trier le classement
-            const sortedTeams = teams.sort((a, b) => {
+            const sortedTeams = [...teams].sort((a, b) => {
                 // D'abord par points
                 if (rankings[b].points !== rankings[a].points) {
                     return rankings[b].points - rankings[a].points;
