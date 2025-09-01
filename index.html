@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Tournoi Unihoc - 7 équipes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+        
+        select, button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        select:hover, button:hover {
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .info-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+        
+        .teams-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .team-item {
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        
+        .team-item:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .day-section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .day-content {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            padding: 25px;
+        }
+        
+        .matches-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .match {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .match.official {
+            background: #e7f3ff;
+            border-color: #0066cc;
+        }
+        
+        .match:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .match-number {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        
+        .match-type {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        .match-type.official {
+            background: #0066cc;
+            color: white;
+        }
+        
+        .match-type.friendly {
+            background: #28a745;
+            color: white;
+        }
+        
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .team-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .vs {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        
+        .team-summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff3cd;
+            border-radius: 10px;
+            border: 2px solid #ffc107;
+        }
+        
+        .team-summary h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .summary-item {
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .edit-notice {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            color: #0c5460;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .controls, .edit-notice, .info-box, .warning-box {
+                display: none;
+            }
+            .day-section {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏒 Tournoi de Unihoc - Planning 4 Journées</h1>
+            <div class="subtitle">7 équipes • 4 journées • 16 matchs par équipe</div>
+        </header>
+        
+        <div class="content">
+            <div class="edit-notice">
+                💡 <strong>Pour modifier les noms des équipes :</strong> Recherchez <code>const teams = [</code> dans le code source (ligne ~360) et remplacez les noms entre guillemets.
+            </div>
+            
+            <div class="info-box">
+                ✅ <strong>Organisation :</strong> Chaque équipe joue exactement 4 matchs par journée. Avec 7 équipes, certaines équipes se rencontreront plusieurs fois pour atteindre les 14 matchs nécessaires par journée.
+            </div>
+            
+            <div class="controls">
+                <h2>⚙️ Configuration du tournoi</h2>
+                <div class="control-group">
+                    <label for="officialMatches">Nombre de matchs officiels par équipe et par journée :</label>
+                    <select id="officialMatches">
+                        <option value="3">3 matchs officiels + 1 amical (Recommandé)</option>
+                        <option value="2">2 matchs officiels + 2 amicaux</option>
+                        <option value="4">4 matchs officiels (Tous comptent)</option>
+                    </select>
+                </div>
+                <button onclick="regenerateSchedule()">🔄 Régénérer le planning</button>
+                <button onclick="window.print()">🖨️ Imprimer le planning</button>
+            </div>
+            
+            <div class="teams-section">
+                <h2>📋 Équipes participantes</h2>
+                <div class="teams-grid" id="teamsList"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">Équipes</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Journées</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">14</span>
+                    <span class="stat-label">Matchs/journée</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">56</span>
+                    <span class="stat-label">Matchs totaux</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Matchs/équipe/jour</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">16</span>
+                    <span class="stat-label">Total matchs/équipe</span>
+                </div>
+            </div>
+            
+            <div id="schedule"></div>
+        </div>
+    </div>
+    
+    <script>
+        // ⚠️ MODIFIEZ ICI LES NOMS DES ÉQUIPES ⚠️
+        const teams = [
+            "Gai séjour2",
+            "Move it", 
+            "Renards",
+            "Heureux Abri 2",
+            "Nuances",
+            "Pela Jo",
+            "Carpe Diem"
+        ];
+        
+        let globalMatchCounter = 1;
+        let teamMatchCount = {};
+        let teamOpponents = {};
+        
+        // Initialiser les compteurs
+        function initializeCounters() {
+            globalMatchCounter = 1;
+            teamMatchCount = {};
+            teamOpponents = {};
+            teams.forEach(team => {
+                teamMatchCount[team] = { official: 0, friendly: 0, total: 0, dayMatches: 0 };
+                teamOpponents[team] = {};
+                teams.forEach(otherTeam => {
+                    if (team !== otherTeam) {
+                        teamOpponents[team][otherTeam] = 0;
+                    }
+                });
+            });
+        }
+        
+        // Générer les matchs pour une journée
+        function generateDayMatches(dayNumber, officialPerDay) {
+            const matches = [];
+            const dayMatchCount = {};
+            
+            // Initialiser le compteur de matchs du jour
+            teams.forEach(team => {
+                dayMatchCount[team] = 0;
+            });
+            
+            // Générer 14 matchs (7 équipes × 4 matchs ÷ 2)
+            let attempts = 0;
+            while (matches.length < 14 && attempts < 1000) {
+                attempts++;
+                
+                // Trouver les équipes qui ont joué le moins ce jour
+                const teamsByMatches = teams.filter(t => dayMatchCount[t] < 4)
+                    .sort((a, b) => dayMatchCount[a] - dayMatchCount[b]);
+                
+                if (teamsByMatches.length < 2) break;
+                
+                const team1 = teamsByMatches[0];
+                
+                // Trouver le meilleur adversaire pour team1
+                const possibleOpponents = teamsByMatches.slice(1).filter(t => {
+                    // Vérifier qu'ils ne jouent pas déjà ensemble dans ce tour
+                    const alreadyPlaying = matches.some(m => 
+                        (m.team1 === team1 && m.team2 === t) || 
+                        (m.team1 === t && m.team2 === team1)
+                    );
+                    return !alreadyPlaying;
+                });
+                
+                if (possibleOpponents.length === 0) continue;
+                
+                // Préférer les équipes qui ont le moins joué contre team1
+                possibleOpponents.sort((a, b) => {
+                    const scoreA = teamOpponents[team1][a] * 10 + dayMatchCount[a];
+                    const scoreB = teamOpponents[team1][b] * 10 + dayMatchCount[b];
+                    return scoreA - scoreB;
+                });
+                
+                const team2 = possibleOpponents[0];
+                
+                // Déterminer si c'est un match officiel
+                const team1DayOfficials = matches.filter(m => 
+                    m.isOfficial && (m.team1 === team1 || m.team2 === team1)
+                ).length;
+                const team2DayOfficials = matches.filter(m => 
+                    m.isOfficial && (m.team1 === team2 || m.team2 === team2)
+                ).length;
+                
+                let isOfficial = false;
+                if (team1DayOfficials < officialPerDay && team2DayOfficials < officialPerDay) {
+                    // Préférer officiel pour les premières rencontres
+                    isOfficial = teamOpponents[team1][team2] === 0 || 
+                                (team1DayOfficials + team2DayOfficials < officialPerDay * 2 - 2);
+                }
+                
+                matches.push({
+                    team1: team1,
+                    team2: team2,
+                    isOfficial: isOfficial,
+                    matchNumber: globalMatchCounter++
+                });
+                
+                // Mettre à jour les compteurs
+                dayMatchCount[team1]++;
+                dayMatchCount[team2]++;
+                teamOpponents[team1][team2]++;
+                teamOpponents[team2][team1]++;
+                
+                if (isOfficial) {
+                    teamMatchCount[team1].official++;
+                    teamMatchCount[team2].official++;
+                } else {
+                    teamMatchCount[team1].friendly++;
+                    teamMatchCount[team2].friendly++;
+                }
+                teamMatchCount[team1].total++;
+                teamMatchCount[team2].total++;
+            }
+            
+            // Vérifier que chaque équipe a bien 4 matchs
+            const incomplete = teams.filter(t => dayMatchCount[t] !== 4);
+            if (incomplete.length > 0 && matches.length < 14) {
+                // Compléter avec des matchs supplémentaires si nécessaire
+                for (let team of incomplete) {
+                    if (dayMatchCount[team] < 4) {
+                        const possibleOpponents = teams.filter(t => 
+                            t !== team && dayMatchCount[t] < 4
+                        );
+                        
+                        for (let opponent of possibleOpponents) {
+                            if (dayMatchCount[team] < 4 && dayMatchCount[opponent] < 4) {
+                                matches.push({
+                                    team1: team,
+                                    team2: opponent,
+                                    isOfficial: false,
+                                    matchNumber: globalMatchCounter++
+                                });
+                                dayMatchCount[team]++;
+                                dayMatchCount[opponent]++;
+                                teamMatchCount[team].friendly++;
+                                teamMatchCount[opponent].friendly++;
+                                teamMatchCount[team].total++;
+                                teamMatchCount[opponent].total++;
+                                
+                                if (matches.length >= 14) break;
+                            }
+                        }
+                    }
+                    if (matches.length >= 14) break;
+                }
+            }
+            
+            return matches.slice(0, 14); // S'assurer qu'on a exactement 14 matchs
+        }
+        
+        // Générer le planning complet
+        function generateFullSchedule() {
+            initializeCounters();
+            const officialPerDay = parseInt(document.getElementById('officialMatches').value);
+            const schedule = [];
+            
+            for (let day = 1; day <= 4; day++) {
+                const dayMatches = generateDayMatches(day, officialPerDay);
+                schedule.push({
+                    day: day,
+                    matches: dayMatches
+                });
+            }
+            
+            return schedule;
+        }
+        
+        // Afficher la liste des équipes
+        function displayTeams() {
+            const teamsList = document.getElementById('teamsList');
+            teamsList.innerHTML = '';
+            teams.forEach((team, index) => {
+                const teamDiv = document.createElement('div');
+                teamDiv.className = 'team-item';
+                teamDiv.textContent = `${index + 1}. ${team}`;
+                teamsList.appendChild(teamDiv);
+            });
+        }
+        
+        // Afficher le planning
+        function displaySchedule() {
+            const schedule = generateFullSchedule();
+            const scheduleDiv = document.getElementById('schedule');
+            scheduleDiv.innerHTML = '';
+            
+            schedule.forEach(day => {
+                const daySection = document.createElement('div');
+                daySection.className = 'day-section';
+                
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                dayHeader.textContent = `📅 Journée ${day.day}`;
+                daySection.appendChild(dayHeader);
+                
+                const dayContent = document.createElement('div');
+                dayContent.className = 'day-content';
+                
+                // Statistiques de la journée
+                const officialCount = day.matches.filter(m => m.isOfficial).length;
+                const friendlyCount = day.matches.filter(m => !m.isOfficial).length;
+                
+                const dayStats = document.createElement('div');
+                dayStats.innerHTML = `
+                    <p><strong>📊 Résumé :</strong> ${day.matches.length} matchs • 
+                    ${officialCount} officiels • ${friendlyCount} amicaux</p>
+                `;
+                dayContent.appendChild(dayStats);
+                
+                // Matchs
+                const matchesContainer = document.createElement('div');
+                matchesContainer.className = 'matches-container';
+                
+                day.matches.forEach(match => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = `match ${match.isOfficial ? 'official' : ''}`;
+                    
+                    matchDiv.innerHTML = `
+                        <div class="match-header">
+                            <span class="match-number">Match ${match.matchNumber}</span>
+                            <span class="match-type ${match.isOfficial ? 'official' : 'friendly'}">
+                                ${match.isOfficial ? 'OFFICIEL' : 'AMICAL'}
+                            </span>
+                        </div>
+                        <div class="match-teams">
+                            <span class="team-name">${match.team1}</span>
+                            <span class="vs">VS</span>
+                            <span class="team-name">${match.team2}</span>
+                        </div>
+                    `;
+                    
+                    matchesContainer.appendChild(matchDiv);
+                });
+                
+                dayContent.appendChild(matchesContainer);
+                
+                // Résumé par équipe pour cette journée
+                const teamSummary = document.createElement('div');
+                teamSummary.className = 'team-summary';
+                teamSummary.innerHTML = '<h3>🏃 Matchs par équipe cette journée :</h3>';
+                
+                const summaryGrid = document.createElement('div');
+                summaryGrid.className = 'summary-grid';
+                
+                teams.forEach(team => {
+                    const teamMatches = day.matches.filter(m => m.team1 === team || m.team2 === team);
+                    const officials = teamMatches.filter(m => m.isOfficial).length;
+                    const friendlies = teamMatches.filter(m => !m.isOfficial).length;
+                    
+                    const summaryItem = document.createElement('div');
+                    summaryItem.className = 'summary-item';
+                    summaryItem.innerHTML = `<strong>${team}:</strong> ${teamMatches.length} matchs (${officials} off. / ${friendlies} am.)`;
+                    summaryGrid.appendChild(summaryItem);
+                });
+                
+                teamSummary.appendChild(summaryGrid);
+                dayContent.appendChild(teamSummary);
+                
+                daySection.appendChild(dayContent);
+                scheduleDiv.appendChild(daySection);
+            });
+            
+            // Afficher le résumé final
+            const finalSummary = document.createElement('div');
+            finalSummary.className = 'warning-box';
+            finalSummary.innerHTML = '<h3>📈 Résumé total de la saison :</h3>';
+            
+            const finalGrid = document.createElement('div');
+            finalGrid.className = 'summary-grid';
+            
+            teams.forEach(team => {
+                const item = document.createElement('div');
+                item.className = 'summary-item';
+                item.innerHTML = `<strong>${team}:</strong> ${teamMatchCount[team].total} matchs (${teamMatchCount[team].official} off. / ${teamMatchCount[team].friendly} am.)`;
+                finalGrid.appendChild(item);
+            });
+            
+            finalSummary.appendChild(finalGrid);
+            scheduleDiv.appendChild(finalSummary);
+        }
+        
+        // Régénérer le planning
+        function regenerateSchedule() {
+            displaySchedule();
+        }
+        
+        // Initialisation
+        displayTeams();
+        displaySchedule();
+    </script>
+</body>
+</html>
